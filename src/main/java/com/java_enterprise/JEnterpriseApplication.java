@@ -74,7 +74,7 @@ public class JEnterpriseApplication {
         ;
         System.out.println(existMemberIdList);
 
-        //get member task statues
+        //get member task statuses
         var member3 = memberService.read(3L);
         Map<String, Status> taskStatuesByMember = memberService.getTaskStatuesByMember(member3);
         System.out.println(taskStatuesByMember);
