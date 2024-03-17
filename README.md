@@ -1,1 +1,1 @@
-# Hello Git
+# Java enterprise course
