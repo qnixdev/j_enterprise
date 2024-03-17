@@ -1,9 +1,7 @@
-package com.java_enterprise.home_work_2;
+package com.java_enterprise.non_spring_hw.home_work_2;
 
 import java.util.Arrays;
 import java.util.Random;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 
 public class ValueCalculator {
     private double[] originArray;

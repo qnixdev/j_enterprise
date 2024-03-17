@@ -1,4 +1,4 @@
-package com.java_enterprise.home_work_2;
+package com.java_enterprise.non_spring_hw.home_work_2;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {

@@ -1,4 +1,4 @@
-package com.java_enterprise.home_work_3;
+package com.java_enterprise.non_spring_hw.home_work_3;
 
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
