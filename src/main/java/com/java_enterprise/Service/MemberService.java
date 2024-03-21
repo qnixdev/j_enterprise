@@ -48,8 +48,9 @@ public class MemberService {
         var existMember = task.getMember();
 
         if (existMember != newMember) {
-            existMember.removeTask(task);
-            newMember.addTask(task);
+            existMember.getTasks().remove(task);
+            newMember.getTasks().add(task);
+            task.setMember(newMember);
         }
     }
 
