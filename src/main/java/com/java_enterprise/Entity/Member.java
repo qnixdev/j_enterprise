@@ -1,5 +1,6 @@
 package com.java_enterprise.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,11 +9,11 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Data
-@ToString
 public class Member {
     private Long id;
 
     private String name;
 
+    @JsonManagedReference
     List<Task> tasks = new ArrayList<>();
 }

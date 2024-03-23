@@ -1,8 +1,6 @@
 package com.java_enterprise.Repository;
 
 import com.java_enterprise.Entity.Task;
-import com.java_enterprise.Enum.Priority;
-import com.java_enterprise.Enum.Status;
 import org.springframework.stereotype.Repository;
 import java.util.*;
 
@@ -32,29 +30,5 @@ public class TaskRepository {
 
     public Iterable<Task> findAll() {
         return this.tasks.values();
-    }
-
-    public List<Task> findBy(Status status) {
-        return this.tasks.values()
-            .stream()
-            .filter(t -> t.getStatus() == status)
-            .toList()
-        ;
-    }
-
-    public List<Task> findBy(Priority priority) {
-        return this.tasks.values()
-            .stream()
-            .filter(t -> t.getPriority() == priority)
-            .toList()
-        ;
-    }
-
-    public List<Task> findBy(Date dateDeadlineAt) {
-        return this.tasks.values()
-            .stream()
-            .filter(t -> t.getDateDeadlineAt().before(dateDeadlineAt))
-            .toList()
-        ;
     }
 }
