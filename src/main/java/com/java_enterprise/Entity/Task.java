@@ -1,9 +1,9 @@
 package com.java_enterprise.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.java_enterprise.Enum.Priority;
 import com.java_enterprise.Enum.Status;
 import lombok.*;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -23,16 +23,6 @@ public class Task {
 
     private Date dateDeadlineAt = new Date();
 
+    @JsonBackReference
     private Member member = null;
-
-    public String toString() {
-        return "Task(id=" + this.getId()
-            + ", name=" + this.getName()
-            + ", description=" + this.getDescription()
-            + ", status=" + this.getStatus()
-            + ", priority=" + this.getPriority()
-            + ", deadline=" + new SimpleDateFormat("yyyy-MM-dd").format(this.getDateDeadlineAt())
-            + ")"
-        ;
-    }
 }
