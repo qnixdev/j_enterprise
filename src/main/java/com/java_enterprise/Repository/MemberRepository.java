@@ -31,4 +31,18 @@ public class MemberRepository {
     public Iterable<Member> findAll() {
         return this.members.values();
     }
+
+    public boolean isExistByName(String name) {
+        return this.members.values()
+            .stream()
+            .anyMatch(m -> m.getName().equals(name))
+        ;
+    }
+
+    public boolean isExistByName(String name, Long existMemberId) {
+        return this.members.values()
+            .stream()
+            .anyMatch(m -> m.getName().equals(name) && !Objects.equals(m.getId(), existMemberId))
+        ;
+    }
 }

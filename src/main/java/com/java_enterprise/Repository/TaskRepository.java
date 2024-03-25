@@ -31,4 +31,18 @@ public class TaskRepository {
     public Iterable<Task> findAll() {
         return this.tasks.values();
     }
+
+    public boolean isExistByName(String name) {
+        return this.tasks.values()
+            .stream()
+            .anyMatch(m -> m.getName().equals(name))
+        ;
+    }
+
+    public boolean isExistByName(String name, Long existTaskId) {
+        return this.tasks.values()
+            .stream()
+            .anyMatch(m -> m.getName().equals(name) && !Objects.equals(m.getId(), existTaskId))
+        ;
+    }
 }
