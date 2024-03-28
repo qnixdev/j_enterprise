@@ -10,8 +10,8 @@ import java.util.List;
 
 @Service
 public class ClientNewsService {
-    @Value("${news.api_url}")
-    private String apiUrl;
+    @Value("${proxy_server.news_url}")
+    private String newsUrl;
 
     private final RestTemplate restTemplate;
 
@@ -22,11 +22,6 @@ public class ClientNewsService {
     public ResponseEntity<List<String>> getNews() {
         ParameterizedTypeReference<List<String>> responseType = new ParameterizedTypeReference<>() {};
 
-        return restTemplate.exchange(
-            String.format("%s/api/news", this.apiUrl),
-            HttpMethod.GET,
-            null,
-            responseType
-        );
+        return restTemplate.exchange(this.newsUrl, HttpMethod.GET, null, responseType);
     }
 }

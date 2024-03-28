@@ -1,5 +1,5 @@
 server:
   port: 8092
 
-news:
-  api_url: ${API_URL}
+proxy_server:
+  news_url: ${PROXY_URL}
