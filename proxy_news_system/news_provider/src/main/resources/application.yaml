@@ -1,0 +1,5 @@
+server:
+  port: 8091
+
+news:
+  api_key: ${NEWS_API_KEY}

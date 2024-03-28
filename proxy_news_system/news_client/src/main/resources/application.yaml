@@ -1,0 +1,5 @@
+server:
+  port: 8092
+
+news:
+  api_url: ${API_URL}
