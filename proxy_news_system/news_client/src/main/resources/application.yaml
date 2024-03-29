@@ -1,0 +1,5 @@
+server:
+  port: 8092
+
+proxy_server:
+  news_url: ${PROXY_URL}
