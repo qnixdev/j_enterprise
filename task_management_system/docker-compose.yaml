@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  tms_app:
+    container_name: tms-app
+    build: ./
+    ports:
+      - '8090:8080'
+    networks:
+      - tms_ntwrk
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    depends_on:
+      - tms_postgresql
+  tms_postgresql:
+    container_name: tms-database
+    image: postgres:13.3
+    ports:
+      - '49164:5432'
+    volumes:
+      - ./data/postgresql:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    networks:
+      - tms_ntwrk
+
+volumes:
+  tms_postgresql:
+
+networks:
+  tms_ntwrk:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.17.0.0/16
+          gateway: 10.17.0.1

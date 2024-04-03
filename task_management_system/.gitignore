@@ -34,3 +34,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+/docker/.env
+/docker/data/*
+!/docker/data/.gitkeep
