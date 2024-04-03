@@ -3,18 +3,15 @@ help:
 	@echo "usage: make COMMAND"
 	@echo ""
 	@echo "Commands:"
-	@echo "  build               Build app"
-	@echo "  init                Create containers"
+	@echo "  init                Create containers and network"
 	@echo "  up                  Up containers"
 	@echo "  ps                  Show containers info"
-	@echo "  exec                Exec to app container"
+	@echo "  exec                Exec to app"
 	@echo "  stop                Stop containers"
 	@echo "  rm                  Remove containers"
 
-build:
-	mvn -f ./task_management_system install -DskipTests
-
 init:
+	mvn -f ./task_management_system install -DskipTests
 	docker compose -f ./task_management_system/docker-compose.yaml --env-file ./task_management_system/docker/.env up -d --build
 
 up:

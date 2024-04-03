@@ -10,7 +10,7 @@ cp ./task_management_system/docker/.env.sample ./task_management_system/docker/.
 ```
 > Note: `modify .env` If you need to change settings.
 
-Init docker containers:
+Init & run application:
 ```sh
 make init
 ```
