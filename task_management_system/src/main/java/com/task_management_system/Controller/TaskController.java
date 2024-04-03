@@ -1,22 +1,47 @@
-package com.task_management_system.Controller.Task;
+package com.task_management_system.Controller;
 
 import com.task_management_system.Entity.Task;
 import com.task_management_system.Request.Task.TaskCreateRequest;
+import com.task_management_system.Request.Task.TaskDelegateRequest;
+import com.task_management_system.Request.Task.TaskStatusRequest;
 import com.task_management_system.Request.Task.TaskUpdateRequest;
 import com.task_management_system.Service.Task.TaskCrudService;
+import com.task_management_system.Service.Task.TaskRelationService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/task")
-public class TaskCrudController {
+public class TaskController {
     private final TaskCrudService taskCrudService;
+    private final TaskRelationService taskRelationService;
 
-    @Autowired
-    public TaskCrudController(TaskCrudService taskCrudService) {
+    public TaskController(
+        TaskCrudService taskCrudService,
+        TaskRelationService taskRelationService
+    ) {
         this.taskCrudService = taskCrudService;
+        this.taskRelationService = taskRelationService;
+    }
+
+    @GetMapping("/list")
+    public Iterable<Task> listAll() {
+        return this.taskCrudService.list();
+    }
+
+    @PatchMapping("/delegate")
+    public ResponseEntity<Task> delegate(@Valid @RequestBody TaskDelegateRequest request) throws Exception {
+        Task task = this.taskRelationService.delegate(request);
+
+        return ResponseEntity.ok(task);
+    }
+
+    @PatchMapping("/change-status")
+    public ResponseEntity<Task> status(@Valid @RequestBody TaskStatusRequest request) throws Exception {
+        Task task = this.taskRelationService.changeStatus(request);
+
+        return ResponseEntity.ok(task);
     }
 
     @PostMapping

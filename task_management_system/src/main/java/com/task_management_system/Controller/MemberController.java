@@ -1,22 +1,40 @@
-package com.task_management_system.Controller.Member;
+package com.task_management_system.Controller;
 
 import com.task_management_system.Entity.Member;
+import com.task_management_system.Enum.Status;
 import com.task_management_system.Request.Member.MemberCreateRequest;
 import com.task_management_system.Request.Member.MemberUpdateRequest;
 import com.task_management_system.Service.Member.MemberCrudService;
+import com.task_management_system.Service.Member.MemberRelationService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/member")
-public class MemberCrudController {
+public class MemberController {
     private final MemberCrudService memberCrudService;
+    private final MemberRelationService memberRelationService;
 
-    @Autowired
-    public MemberCrudController(MemberCrudService memberCrudService) {
+    public MemberController(
+        MemberCrudService memberCrudService,
+        MemberRelationService memberRelationService
+    ) {
         this.memberCrudService = memberCrudService;
+        this.memberRelationService = memberRelationService;
+    }
+
+    @GetMapping("/list")
+    public Iterable<Member> listAll() {
+        return this.memberCrudService.list();
+    }
+
+    @GetMapping("/{id}/task-status")
+    public ResponseEntity<Map<String, Status>> getMemberTaskStatusMap(@PathVariable Long id) throws Exception {
+        Member member = this.memberCrudService.read(id);
+
+        return ResponseEntity.ok(this.memberRelationService.getTaskStatuesByMember(member));
     }
 
     @PostMapping
