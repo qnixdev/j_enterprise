@@ -9,6 +9,7 @@ help:
 	@echo "  exec                Exec to app"
 	@echo "  stop                Stop containers"
 	@echo "  rm                  Remove containers"
+	@echo "  log                 Show logs of containers"
 
 init:
 	mvn -f ./task_management_system install -DskipTests
@@ -30,3 +31,6 @@ rm:
 	docker compose -f ./task_management_system/docker-compose.yaml --env-file ./task_management_system/docker/.env stop -t0
 	docker compose -f ./task_management_system/docker-compose.yaml --env-file ./task_management_system/docker/.env rm -f
 	mvn -f ./task_management_system clean
+
+log:
+	docker compose -f ./task_management_system/docker-compose.yaml --env-file ./task_management_system/docker/.env logs

@@ -1,7 +1,7 @@
 package com.task_management_system.Enum;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
+import java.util.stream.Stream;
 
 @AllArgsConstructor
 @Getter
@@ -11,4 +11,16 @@ public enum Priority {
     LOW("low");
 
     private final String name;
+
+    public static Priority fromString(String value) {
+        if (null == value) {
+            return null;
+        }
+
+        return Stream.of(Priority.values())
+            .filter(p -> p.getName().equals(value))
+            .findFirst()
+            .orElseThrow(IllegalArgumentException::new)
+        ;
+    }
 }

@@ -1,47 +1,46 @@
-package com.task_management_system.Service.Member;
+package com.task_management_system.Service;
 
 import com.task_management_system.Entity.Member;
+import com.task_management_system.Entity.Task;
+import com.task_management_system.Enum.Status;
 import com.task_management_system.Exception.MemberByIdNotFoundException;
 import com.task_management_system.Exception.MemberByNameAlreadyExistException;
-import com.task_management_system.Repository.MemberRepository;
+import com.task_management_system.Repository.MemberDAO;
 import com.task_management_system.Request.Member.MemberCreateRequest;
 import com.task_management_system.Request.Member.MemberUpdateRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
-public class MemberCrudService {
-    private final MemberRepository memberRepository;
+public class MemberService {
+    private final MemberDAO memberDAO;
 
-    @Autowired
-    public MemberCrudService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
+    public MemberService(MemberDAO memberDAO) {
+        this.memberDAO = memberDAO;
     }
 
     public Iterable<Member> list() {
-        return this.memberRepository.findAll();
+        return this.memberDAO.findAll();
     }
 
     public Member create(MemberCreateRequest request) throws Exception {
         this.checkReceivedName(request.getName());
 
         Member member = Member.builder()
-            .id(this.memberRepository.nextId())
+            .id(this.memberDAO.nextId())
             .name(request.getName())
             .tasks(new ArrayList<>())
             .build()
         ;
-        this.memberRepository.add(member);
+        this.memberDAO.add(member);
 
         return member;
     }
 
     public Member read(Long id) throws Exception {
-        return this.memberRepository
-            .findById(id)
-            .orElseThrow(() -> new MemberByIdNotFoundException(id))
-        ;
+        return this.memberDAO.find(id).orElseThrow(() -> new MemberByIdNotFoundException(id));
     }
 
     public Member update(Member member, MemberUpdateRequest request) throws Exception {
@@ -55,17 +54,24 @@ public class MemberCrudService {
     }
 
     public void delete(Member member) {
-        this.memberRepository.remove(member);
+        this.memberDAO.remove(member);
+    }
+
+    public Map<String, Status> getTaskStatuesByMember(Member member) {
+        return member.getTasks()
+            .stream()
+            .collect(Collectors.toMap(Task::getName, Task::getStatus))
+        ;
     }
 
     private void checkReceivedName(String name) throws Exception {
-        if (this.memberRepository.isExistByName(name)) {
+        if (this.memberDAO.isExistByName(name)) {
             throw new MemberByNameAlreadyExistException(name);
         }
     }
 
     private void checkReceivedName(String name, Long id) throws Exception {
-        if (this.memberRepository.isExistByName(name, id)) {
+        if (this.memberDAO.isExistByName(name, id)) {
             throw new MemberByNameAlreadyExistException(name);
         }
     }
