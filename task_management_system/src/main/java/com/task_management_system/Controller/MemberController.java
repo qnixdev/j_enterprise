@@ -4,8 +4,7 @@ import com.task_management_system.Entity.Member;
 import com.task_management_system.Enum.Status;
 import com.task_management_system.Request.Member.MemberCreateRequest;
 import com.task_management_system.Request.Member.MemberUpdateRequest;
-import com.task_management_system.Service.Member.MemberCrudService;
-import com.task_management_system.Service.Member.MemberRelationService;
+import com.task_management_system.Service.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,55 +13,50 @@ import java.util.Map;
 @RestController
 @RequestMapping("/member")
 public class MemberController {
-    private final MemberCrudService memberCrudService;
-    private final MemberRelationService memberRelationService;
+    private final MemberService memberService;
 
-    public MemberController(
-        MemberCrudService memberCrudService,
-        MemberRelationService memberRelationService
-    ) {
-        this.memberCrudService = memberCrudService;
-        this.memberRelationService = memberRelationService;
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
     }
 
     @GetMapping("/list")
     public Iterable<Member> listAll() {
-        return this.memberCrudService.list();
-    }
-
-    @GetMapping("/{id}/task-status")
-    public ResponseEntity<Map<String, Status>> getMemberTaskStatusMap(@PathVariable Long id) throws Exception {
-        Member member = this.memberCrudService.read(id);
-
-        return ResponseEntity.ok(this.memberRelationService.getTaskStatuesByMember(member));
+        return this.memberService.list();
     }
 
     @PostMapping
     public ResponseEntity<Member> create(@Valid @RequestBody MemberCreateRequest request) throws Exception {
-        var member = this.memberCrudService.create(request);
+        var member = this.memberService.create(request);
 
         return ResponseEntity.ok(member);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Member> read(@PathVariable Long id) throws Exception {
-        var member = this.memberCrudService.read(id);
+        var member = this.memberService.read(id);
 
         return ResponseEntity.ok(member);
     }
 
     @PutMapping
     public ResponseEntity<Member> update(@Valid @RequestBody MemberUpdateRequest request) throws Exception {
-        var member = this.memberCrudService.read(request.getId());
+        var member = this.memberService.read(request.getId());
 
-        return ResponseEntity.ok(this.memberCrudService.update(member, request));
+        return ResponseEntity.ok(this.memberService.update(member, request));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id) throws Exception {
-        var member = this.memberCrudService.read(id);
-        this.memberCrudService.delete(member);
+        var member = this.memberService.read(id);
+        this.memberService.delete(member);
 
         return ResponseEntity.ok(true);
+    }
+
+    @GetMapping("/{id}/task-status")
+    public ResponseEntity<Map<String, Status>> getMemberTaskStatusMap(@PathVariable Long id) throws Exception {
+        Member member = this.memberService.read(id);
+
+        return ResponseEntity.ok(this.memberService.getTaskStatuesByMember(member));
     }
 }
