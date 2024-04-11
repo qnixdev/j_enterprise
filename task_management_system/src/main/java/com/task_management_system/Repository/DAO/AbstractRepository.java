@@ -1,4 +1,4 @@
-package com.task_management_system.Repository;
+package com.task_management_system.Repository.DAO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.sql.DataSource;

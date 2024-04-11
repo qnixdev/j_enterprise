@@ -5,7 +5,7 @@ import com.task_management_system.Entity.Task;
 import com.task_management_system.Enum.Status;
 import com.task_management_system.Exception.MemberByIdNotFoundException;
 import com.task_management_system.Exception.MemberByNameAlreadyExistException;
-import com.task_management_system.Repository.MemberDAO;
+import com.task_management_system.Repository.DAO.MemberDAO;
 import com.task_management_system.Request.Member.MemberCreateRequest;
 import com.task_management_system.Request.Member.MemberUpdateRequest;
 import org.springframework.stereotype.Service;

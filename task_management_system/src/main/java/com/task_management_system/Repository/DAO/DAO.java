@@ -1,4 +1,4 @@
-package com.task_management_system.Repository;
+package com.task_management_system.Repository.DAO;
 
 import java.util.Optional;
 import java.util.UUID;

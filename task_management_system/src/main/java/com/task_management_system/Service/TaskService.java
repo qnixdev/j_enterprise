@@ -4,7 +4,7 @@ import com.task_management_system.Entity.Member;
 import com.task_management_system.Entity.Task;
 import com.task_management_system.Exception.TaskByIdNotFoundException;
 import com.task_management_system.Exception.TaskByNameAlreadyExistException;
-import com.task_management_system.Repository.TaskDAO;
+import com.task_management_system.Repository.DAO.TaskDAO;
 import com.task_management_system.Request.Task.TaskCreateRequest;
 import com.task_management_system.Request.Task.TaskDelegateRequest;
 import com.task_management_system.Request.Task.TaskStatusRequest;

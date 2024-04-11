@@ -7,7 +7,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-public class PostgresConfig {
+public class DBConfig {
     @Value("${app.pg_user}")
     private String user;
 

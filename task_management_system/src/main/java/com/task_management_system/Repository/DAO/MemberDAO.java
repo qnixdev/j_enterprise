@@ -1,4 +1,4 @@
-package com.task_management_system.Repository;
+package com.task_management_system.Repository.DAO;
 
 import com.task_management_system.Entity.Member;
 import org.springframework.stereotype.Repository;
