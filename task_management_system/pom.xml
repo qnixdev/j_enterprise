@@ -10,7 +10,7 @@
     </parent>
     <groupId>com</groupId>
     <artifactId>task_management_system</artifactId>
-    <version>2.0.0</version>
+    <version>3.0.0</version>
     <name>task_management_system</name>
     <description>task_management_system</description>
     <properties>
