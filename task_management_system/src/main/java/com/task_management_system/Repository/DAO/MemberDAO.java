@@ -2,12 +2,14 @@ package com.task_management_system.Repository.DAO;
 
 import com.task_management_system.Entity.Member;
 import com.task_management_system.Repository.AsMemberRepository;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 
 @Repository
+@ConditionalOnProperty(name = "app.use_source", havingValue = "dao")
 public class MemberDAO implements AsMemberRepository {
     private final DataSource dataSource;
 
