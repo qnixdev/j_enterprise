@@ -4,7 +4,7 @@ import com.task_management_system.Entity.Member;
 import com.task_management_system.Entity.Task;
 import com.task_management_system.Exception.TaskByIdNotFoundException;
 import com.task_management_system.Exception.TaskByNameAlreadyExistException;
-import com.task_management_system.Repository.DAO.TaskDAO;
+import com.task_management_system.Repository.AsTaskRepository;
 import com.task_management_system.Request.Task.TaskCreateRequest;
 import com.task_management_system.Request.Task.TaskDelegateRequest;
 import com.task_management_system.Request.Task.TaskStatusRequest;
@@ -15,18 +15,18 @@ import java.util.UUID;
 @Service
 public class TaskService {
     private final MemberService memberService;
-    private final TaskDAO taskDAO;
+    private final AsTaskRepository taskRepository;
 
     public TaskService(
         MemberService memberService,
-        TaskDAO taskDAO
+        AsTaskRepository taskRepository
     ) {
         this.memberService = memberService;
-        this.taskDAO = taskDAO;
+        this.taskRepository = taskRepository;
     }
 
     public Iterable<Task> list() {
-        return this.taskDAO.findAll();
+        return this.taskRepository.findAll();
     }
 
     public Task create(TaskCreateRequest request) throws Exception {
@@ -47,13 +47,13 @@ public class TaskService {
             task.setMember(member);
         }
 
-        this.taskDAO.add(task);
+        this.taskRepository.save(task);
 
         return task;
     }
 
     public Task read(UUID id) throws Exception {
-        return this.taskDAO.find(id).orElseThrow(() -> new TaskByIdNotFoundException(id));
+        return this.taskRepository.findById(id).orElseThrow(() -> new TaskByIdNotFoundException(id));
     }
 
     public Task update(Task task, TaskUpdateRequest request) throws Exception {
@@ -78,7 +78,7 @@ public class TaskService {
     }
 
     public void delete(Task task) {
-        this.taskDAO.remove(task);
+        this.taskRepository.delete(task);
     }
 
     public Task delegate(TaskDelegateRequest request) throws Exception {
@@ -100,13 +100,13 @@ public class TaskService {
     }
 
     private void checkReceivedName(String name) throws Exception {
-        if (this.taskDAO.isExistByName(name)) {
+        if (this.taskRepository.isExistByName(name)) {
             throw new TaskByNameAlreadyExistException(name);
         }
     }
 
     private void checkReceivedName(String name, UUID id) throws Exception {
-        if (this.taskDAO.isExistByName(name, id)) {
+        if (this.taskRepository.isExistByName(name, id)) {
             throw new TaskByNameAlreadyExistException(name);
         }
     }

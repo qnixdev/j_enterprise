@@ -1,14 +1,22 @@
 package com.task_management_system.Repository.DAO;
 
 import com.task_management_system.Entity.Member;
+import com.task_management_system.Repository.AsMemberRepository;
 import org.springframework.stereotype.Repository;
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 
 @Repository
-public class MemberDAO extends AbstractRepository implements DAO<Member> {
+public class MemberDAO implements AsMemberRepository {
+    private final DataSource dataSource;
+
+    public MemberDAO(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
     @Override
-    public Optional<Member> find(UUID id) {
+    public Optional<Member> findById(UUID id) {
         try (PreparedStatement statement = this.dataSource.getConnection().prepareStatement("SELECT * FROM member WHERE id = ?")) {
             statement.setObject(1, id);
             ResultSet result = statement.executeQuery();
@@ -39,7 +47,8 @@ public class MemberDAO extends AbstractRepository implements DAO<Member> {
         }
     }
 
-    public void add(Member member) {
+    @Override
+    public Member save(Member member) {
         try (
             PreparedStatement statement = this.dataSource.getConnection().prepareStatement(
                 "INSERT INTO member (name) VALUES (?)",
@@ -54,12 +63,15 @@ public class MemberDAO extends AbstractRepository implements DAO<Member> {
             if (result.next()) {
                 member.setId(result.getObject("id", UUID.class));
             }
+
+            return member;
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
     }
 
-    public void remove(Member member) {
+    @Override
+    public void delete(Member member) {
         try (PreparedStatement statement = this.dataSource.getConnection().prepareStatement("DELETE FROM member WHERE id = ?")) {
             statement.setObject(1, member.getId());
             statement.executeUpdate();
@@ -68,8 +80,13 @@ public class MemberDAO extends AbstractRepository implements DAO<Member> {
         }
     }
 
+    @Override
     public boolean isExistByName(String name) {
-        try (PreparedStatement statement = this.dataSource.getConnection().prepareStatement("SELECT COUNT(id) > 0 AS count FROM member WHERE LOWER(name) = ?")) {
+        try (
+            PreparedStatement statement = this.dataSource.getConnection().prepareStatement(
+                "SELECT COUNT(id) > 0 AS count FROM member WHERE LOWER(name) = ?"
+            )
+        ) {
             statement.setString(1, name);
             ResultSet result = statement.executeQuery();
 
@@ -83,8 +100,13 @@ public class MemberDAO extends AbstractRepository implements DAO<Member> {
         }
     }
 
+    @Override
     public boolean isExistByName(String name, UUID existMemberId) {
-        try (PreparedStatement statement = this.dataSource.getConnection().prepareStatement("SELECT COUNT(id) > 0 AS count FROM member WHERE LOWER(name) = ? AND id != ?")) {
+        try (
+            PreparedStatement statement = this.dataSource.getConnection().prepareStatement(
+                "SELECT COUNT(id) > 0 AS count FROM member WHERE LOWER(name) = ? AND id != ?"
+            )
+        ) {
             statement.setString(1, name);
             statement.setObject(2, existMemberId);
             ResultSet result = statement.executeQuery();

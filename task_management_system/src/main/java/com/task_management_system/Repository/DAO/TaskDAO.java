@@ -3,14 +3,22 @@ package com.task_management_system.Repository.DAO;
 import com.task_management_system.Entity.Task;
 import com.task_management_system.Enum.Priority;
 import com.task_management_system.Enum.Status;
+import com.task_management_system.Repository.AsTaskRepository;
 import org.springframework.stereotype.Repository;
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 
 @Repository
-public class TaskDAO extends AbstractRepository implements DAO<Task> {
+public class TaskDAO implements AsTaskRepository {
+    private final DataSource dataSource;
+
+    public TaskDAO(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
     @Override
-    public Optional<Task> find(UUID id) {
+    public Optional<Task> findById(UUID id) {
         try (PreparedStatement statement = this.dataSource.getConnection().prepareStatement("SELECT * FROM task WHERE id = ?")) {
             statement.setObject(1, id);
             ResultSet result = statement.executeQuery();
@@ -41,7 +49,8 @@ public class TaskDAO extends AbstractRepository implements DAO<Task> {
         }
     }
 
-    public void add(Task task) {
+    @Override
+    public Task save(Task task) {
         try (
             PreparedStatement statement = this.dataSource.getConnection().prepareStatement(
                 "INSERT INTO task (id_member, name, description, status, priority, date_deadline_at) VALUES (?, ?, ?, ?, ?, ?)",
@@ -61,12 +70,15 @@ public class TaskDAO extends AbstractRepository implements DAO<Task> {
             if (result.next()) {
                 task.setId(result.getObject("id", UUID.class));
             }
+
+            return task;
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
     }
 
-    public void remove(Task task) {
+    @Override
+    public void delete(Task task) {
         try (PreparedStatement statement = this.dataSource.getConnection().prepareStatement("DELETE FROM task WHERE id = ?")) {
             statement.setObject(1, task.getId());
             statement.executeUpdate();
@@ -75,8 +87,13 @@ public class TaskDAO extends AbstractRepository implements DAO<Task> {
         }
     }
 
+    @Override
     public boolean isExistByName(String name) {
-        try (PreparedStatement statement = this.dataSource.getConnection().prepareStatement("SELECT COUNT(id) > 0 AS count FROM task WHERE LOWER(name) = ?")) {
+        try (
+            PreparedStatement statement = this.dataSource.getConnection().prepareStatement(
+                "SELECT COUNT(id) > 0 AS count FROM task WHERE LOWER(name) = ?"
+            )
+        ) {
             statement.setString(1, name);
             ResultSet result = statement.executeQuery();
 
@@ -90,8 +107,13 @@ public class TaskDAO extends AbstractRepository implements DAO<Task> {
         }
     }
 
+    @Override
     public boolean isExistByName(String name, UUID existTaskId) {
-        try (PreparedStatement statement = this.dataSource.getConnection().prepareStatement("SELECT COUNT(id) > 0 AS count FROM task WHERE LOWER(name) = ? AND id != ?")) {
+        try (
+            PreparedStatement statement = this.dataSource.getConnection().prepareStatement(
+                "SELECT COUNT(id) > 0 AS count FROM task WHERE LOWER(name) = ? AND id != ?"
+            )
+        ) {
             statement.setString(1, name);
             statement.setObject(2, existTaskId);
             ResultSet result = statement.executeQuery();
@@ -116,5 +138,21 @@ public class TaskDAO extends AbstractRepository implements DAO<Task> {
             .dateDeadlineAt(this.getSimpleData(result.getDate("date_deadline_at")))
             .build()
         ;
+    }
+
+    private java.util.Date getSimpleData(java.sql.Date date) {
+        if (null != date) {
+            return new java.util.Date(date.getTime());
+        }
+
+        return null;
+    }
+
+    private java.sql.Date getSqlData(java.util.Date date) {
+        if (null != date) {
+            return new java.sql.Date(date.getTime());
+        }
+
+        return null;
     }
 }

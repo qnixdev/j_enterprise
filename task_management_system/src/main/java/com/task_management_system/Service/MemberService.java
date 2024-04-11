@@ -5,7 +5,7 @@ import com.task_management_system.Entity.Task;
 import com.task_management_system.Enum.Status;
 import com.task_management_system.Exception.MemberByIdNotFoundException;
 import com.task_management_system.Exception.MemberByNameAlreadyExistException;
-import com.task_management_system.Repository.DAO.MemberDAO;
+import com.task_management_system.Repository.AsMemberRepository;
 import com.task_management_system.Request.Member.MemberCreateRequest;
 import com.task_management_system.Request.Member.MemberUpdateRequest;
 import org.springframework.stereotype.Service;
@@ -14,14 +14,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class MemberService {
-    private final MemberDAO memberDAO;
+    private final AsMemberRepository memberRepository;
 
-    public MemberService(MemberDAO memberDAO) {
-        this.memberDAO = memberDAO;
+    public MemberService(AsMemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
     }
 
     public Iterable<Member> list() {
-        return this.memberDAO.findAll();
+        return this.memberRepository.findAll();
     }
 
     public Member create(MemberCreateRequest request) throws Exception {
@@ -32,13 +32,13 @@ public class MemberService {
             .tasks(new ArrayList<>())
             .build()
         ;
-        this.memberDAO.add(member);
+        this.memberRepository.save(member);
 
         return member;
     }
 
     public Member read(UUID id) throws Exception {
-        return this.memberDAO.find(id).orElseThrow(() -> new MemberByIdNotFoundException(id));
+        return this.memberRepository.findById(id).orElseThrow(() -> new MemberByIdNotFoundException(id));
     }
 
     public Member update(Member member, MemberUpdateRequest request) throws Exception {
@@ -52,7 +52,7 @@ public class MemberService {
     }
 
     public void delete(Member member) {
-        this.memberDAO.remove(member);
+        this.memberRepository.delete(member);
     }
 
     public Map<String, Status> getTaskStatuesByMember(Member member) {
@@ -63,13 +63,13 @@ public class MemberService {
     }
 
     private void checkReceivedName(String name) throws Exception {
-        if (this.memberDAO.isExistByName(name)) {
+        if (this.memberRepository.isExistByName(name)) {
             throw new MemberByNameAlreadyExistException(name);
         }
     }
 
     private void checkReceivedName(String name, UUID id) throws Exception {
-        if (this.memberDAO.isExistByName(name, id)) {
+        if (this.memberRepository.isExistByName(name, id)) {
             throw new MemberByNameAlreadyExistException(name);
         }
     }
