@@ -1,12 +1,13 @@
 package com.task_management_system.Exception;
 
 import org.springframework.http.HttpStatus;
+import java.util.UUID;
 
 public class MemberByIdNotFoundException extends AppException {
-    private static final String FORMAT = "Member with id '%d' not found.";
+    private static final String FORMAT = "Member with id: '%s' not found.";
 
-    public MemberByIdNotFoundException(Long id) {
-        super(String.format(FORMAT, id));
+    public MemberByIdNotFoundException(UUID id) {
+        super(String.format(FORMAT, id.toString()));
     }
 
     @Override

@@ -6,11 +6,12 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 public class TaskUpdateRequest {
     @NotNull
-    private Long id;
+    private UUID id;
 
     @Size(max = 255)
     private String name;
@@ -24,5 +25,5 @@ public class TaskUpdateRequest {
 
     private Date deadline;
 
-    private Long memberId;
+    private UUID memberId;
 }

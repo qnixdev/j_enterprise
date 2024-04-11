@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import java.util.Date;
+import java.util.UUID;
 
 @Getter
 public class TaskCreateRequest {
@@ -22,5 +23,5 @@ public class TaskCreateRequest {
 
     private Date deadline;
 
-    private Long memberId;
+    private UUID memberId;
 }

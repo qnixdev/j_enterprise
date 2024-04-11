@@ -8,26 +8,9 @@ import java.util.*;
 @Repository
 public class MemberDAO extends AbstractRepository implements DAO<Member> {
     @Override
-    public Long nextId() {
-        try (PreparedStatement statement = this.dataSource.getConnection().prepareStatement("SELECT MAX(id) AS max FROM member")) {
-            ResultSet result = statement.executeQuery();
-
-            if (result.next()) {
-                var existLastId = result.getLong("max");
-
-                return ++existLastId;
-            }
-
-            return 1L;
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    @Override
-    public Optional<Member> find(Long id) {
+    public Optional<Member> find(UUID id) {
         try (PreparedStatement statement = this.dataSource.getConnection().prepareStatement("SELECT * FROM member WHERE id = ?")) {
-            statement.setLong(1, id);
+            statement.setObject(1, id);
             ResultSet result = statement.executeQuery();
 
             if (result.next()) {
@@ -57,10 +40,20 @@ public class MemberDAO extends AbstractRepository implements DAO<Member> {
     }
 
     public void add(Member member) {
-        try (PreparedStatement statement = this.dataSource.getConnection().prepareStatement("INSERT INTO member (id, name) VALUES (?, ?)")) {
-            statement.setLong(1, member.getId());
-            statement.setString(2, member.getName());
+        try (
+            PreparedStatement statement = this.dataSource.getConnection().prepareStatement(
+                "INSERT INTO member (name) VALUES (?)",
+                Statement.RETURN_GENERATED_KEYS
+            )
+        ) {
+            statement.setString(1, member.getName());
             statement.executeUpdate();
+
+            ResultSet result = statement.getGeneratedKeys();
+
+            if (result.next()) {
+                member.setId(result.getObject("id", UUID.class));
+            }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -68,7 +61,7 @@ public class MemberDAO extends AbstractRepository implements DAO<Member> {
 
     public void remove(Member member) {
         try (PreparedStatement statement = this.dataSource.getConnection().prepareStatement("DELETE FROM member WHERE id = ?")) {
-            statement.setLong(1, member.getId());
+            statement.setObject(1, member.getId());
             statement.executeUpdate();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
@@ -90,10 +83,10 @@ public class MemberDAO extends AbstractRepository implements DAO<Member> {
         }
     }
 
-    public boolean isExistByName(String name, Long existMemberId) {
+    public boolean isExistByName(String name, UUID existMemberId) {
         try (PreparedStatement statement = this.dataSource.getConnection().prepareStatement("SELECT COUNT(id) > 0 AS count FROM member WHERE LOWER(name) = ? AND id != ?")) {
             statement.setString(1, name);
-            statement.setLong(2, existMemberId);
+            statement.setObject(2, existMemberId);
             ResultSet result = statement.executeQuery();
 
             if (result.next()) {
@@ -108,7 +101,7 @@ public class MemberDAO extends AbstractRepository implements DAO<Member> {
 
     private Member build(ResultSet result) throws SQLException {
         return Member.builder()
-            .id(result.getLong("id"))
+            .id(result.getObject("id", UUID.class))
             .name(result.getString("name"))
             .tasks(new ArrayList<>())
             .build()

@@ -10,6 +10,7 @@ import com.task_management_system.Request.Task.TaskDelegateRequest;
 import com.task_management_system.Request.Task.TaskStatusRequest;
 import com.task_management_system.Request.Task.TaskUpdateRequest;
 import org.springframework.stereotype.Service;
+import java.util.UUID;
 
 @Service
 public class TaskService {
@@ -32,7 +33,6 @@ public class TaskService {
         this.checkReceivedName(request.getName());
 
         var task = Task.builder()
-            .id(this.taskDAO.nextId())
             .name(request.getName())
             .description(request.getDescription())
             .status(request.getStatus())
@@ -52,7 +52,7 @@ public class TaskService {
         return task;
     }
 
-    public Task read(Long id) throws Exception {
+    public Task read(UUID id) throws Exception {
         return this.taskDAO.find(id).orElseThrow(() -> new TaskByIdNotFoundException(id));
     }
 
@@ -105,7 +105,7 @@ public class TaskService {
         }
     }
 
-    private void checkReceivedName(String name, Long id) throws Exception {
+    private void checkReceivedName(String name, UUID id) throws Exception {
         if (this.taskDAO.isExistByName(name, id)) {
             throw new TaskByNameAlreadyExistException(name);
         }

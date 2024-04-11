@@ -1,12 +1,13 @@
 package com.task_management_system.Exception;
 
 import org.springframework.http.HttpStatus;
+import java.util.UUID;
 
 public class TaskByIdNotFoundException extends AppException {
-    private static final String FORMAT = "Task with id '%d' not found.";
+    private static final String FORMAT = "Task with id: '%s' not found.";
 
-    public TaskByIdNotFoundException(Long id) {
-        super(String.format(FORMAT, id));
+    public TaskByIdNotFoundException(UUID id) {
+        super(String.format(FORMAT, id.toString()));
     }
 
     @Override

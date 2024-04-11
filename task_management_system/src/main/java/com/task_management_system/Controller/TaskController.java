@@ -9,6 +9,7 @@ import com.task_management_system.Service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/task")
@@ -32,7 +33,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Task> read(@PathVariable Long id) throws Exception {
+    public ResponseEntity<Task> read(@PathVariable UUID id) throws Exception {
         var task = this.taskService.read(id);
 
         return ResponseEntity.ok(task);
@@ -46,7 +47,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable Long id) throws Exception {
+    public ResponseEntity<Boolean> delete(@PathVariable UUID id) throws Exception {
         var task = this.taskService.read(id);
         this.taskService.delete(task);
 

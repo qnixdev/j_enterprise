@@ -9,8 +9,7 @@ import com.task_management_system.Repository.MemberDAO;
 import com.task_management_system.Request.Member.MemberCreateRequest;
 import com.task_management_system.Request.Member.MemberUpdateRequest;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,7 +28,6 @@ public class MemberService {
         this.checkReceivedName(request.getName());
 
         Member member = Member.builder()
-            .id(this.memberDAO.nextId())
             .name(request.getName())
             .tasks(new ArrayList<>())
             .build()
@@ -39,7 +37,7 @@ public class MemberService {
         return member;
     }
 
-    public Member read(Long id) throws Exception {
+    public Member read(UUID id) throws Exception {
         return this.memberDAO.find(id).orElseThrow(() -> new MemberByIdNotFoundException(id));
     }
 
@@ -70,7 +68,7 @@ public class MemberService {
         }
     }
 
-    private void checkReceivedName(String name, Long id) throws Exception {
+    private void checkReceivedName(String name, UUID id) throws Exception {
         if (this.memberDAO.isExistByName(name, id)) {
             throw new MemberByNameAlreadyExistException(name);
         }

@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/member")
@@ -32,7 +33,7 @@ public class MemberController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Member> read(@PathVariable Long id) throws Exception {
+    public ResponseEntity<Member> read(@PathVariable UUID id) throws Exception {
         var member = this.memberService.read(id);
 
         return ResponseEntity.ok(member);
@@ -46,7 +47,7 @@ public class MemberController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable Long id) throws Exception {
+    public ResponseEntity<Boolean> delete(@PathVariable UUID id) throws Exception {
         var member = this.memberService.read(id);
         this.memberService.delete(member);
 
@@ -54,7 +55,7 @@ public class MemberController {
     }
 
     @GetMapping("/{id}/task-status")
-    public ResponseEntity<Map<String, Status>> getMemberTaskStatusMap(@PathVariable Long id) throws Exception {
+    public ResponseEntity<Map<String, Status>> getMemberTaskStatusMap(@PathVariable UUID id) throws Exception {
         Member member = this.memberService.read(id);
 
         return ResponseEntity.ok(this.memberService.getTaskStatuesByMember(member));
