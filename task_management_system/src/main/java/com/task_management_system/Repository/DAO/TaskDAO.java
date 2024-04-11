@@ -4,12 +4,14 @@ import com.task_management_system.Entity.Task;
 import com.task_management_system.Enum.Priority;
 import com.task_management_system.Enum.Status;
 import com.task_management_system.Repository.AsTaskRepository;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 
 @Repository
+@ConditionalOnProperty(name = "app.use_source", havingValue = "dao")
 public class TaskDAO implements AsTaskRepository {
     private final DataSource dataSource;
 
