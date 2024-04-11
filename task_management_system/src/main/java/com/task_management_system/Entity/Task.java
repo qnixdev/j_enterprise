@@ -1,5 +1,6 @@
 package com.task_management_system.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.task_management_system.Enum.Priority;
 import com.task_management_system.Enum.Status;
 import jakarta.persistence.*;
@@ -33,6 +34,7 @@ public class Task {
     @Column(name = "date_deadline_at")
     private Date dateDeadlineAt = new Date();
 
+    @JsonBackReference
     @ManyToOne(targetEntity = Member.class)
     @JoinColumn(name = "id_member", referencedColumnName = "id")
     private Member member = null;
