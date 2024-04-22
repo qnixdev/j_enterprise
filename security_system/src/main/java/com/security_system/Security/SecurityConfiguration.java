@@ -6,10 +6,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -20,29 +20,28 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-            .authorizeHttpRequests(
-                r -> r
-                    .requestMatchers("/login").permitAll()
-                    .anyRequest().authenticated()
-            )
-            .formLogin(
-                f -> f
-                    .loginPage("/login").permitAll()
-            )
-            .build()
-        ;
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public UserDetailsService userDetailsService(){
-        return new InMemoryUserDetailsManager(
-            User.withDefaultPasswordEncoder()
-                .username("user")
-                .password("password")
-                .roles("USER")
-                .build()
-        );
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+            .authorizeHttpRequests(
+                rc -> rc
+                    .requestMatchers("/registration/**", "/login").permitAll()
+                    .anyRequest().authenticated()
+            )
+            .formLogin(
+                fc -> fc
+                    .loginPage("/login").permitAll()
+                    .defaultSuccessUrl("/home")
+            )
+            .logout(
+                lc -> lc
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
+            )
+            .build()
+        ;
     }
 }
