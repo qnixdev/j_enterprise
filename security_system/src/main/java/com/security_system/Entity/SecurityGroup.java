@@ -12,8 +12,6 @@ import java.util.*;
 @Entity
 @Table(name = "security_group")
 public class SecurityGroup {
-    @AllArgsConstructor
-    @Getter
     public enum Type { ADMIN, USER }
 
     @Id
