@@ -8,6 +8,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>proxy_news_system</module>
+        <module>security_system</module>
         <module>task_management_system</module>
     </modules>
     <properties>

@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+  ss_app:
+    container_name: ss-app
+    build: ./
+    ports:
+      - '8091:8080'
+    networks:
+      - ss_ntwrk
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    depends_on:
+      - ss_postgresql
+  ss_postgresql:
+    container_name: ss-database
+    image: postgres:13.3
+    ports:
+      - '49165:5432'
+    volumes:
+      - ./docker/data/postgresql:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - ss_ntwrk
+
+volumes:
+  ss_postgresql:
+
+networks:
+  ss_ntwrk:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.18.0.0/16
+          gateway: 10.18.0.1
