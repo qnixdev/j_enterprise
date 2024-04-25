@@ -1,3 +1,6 @@
+#module = task_management_system
+module = security_system
+
 help:
 	@echo ""
 	@echo "usage: make COMMAND"
@@ -12,25 +15,25 @@ help:
 	@echo "  log                 Show logs of containers"
 
 init:
-	mvn -f ./task_management_system install -DskipTests
-	docker compose -f ./task_management_system/docker-compose.yaml --env-file ./task_management_system/docker/.env up -d --build
+	mvn -f ./$(module) install -DskipTests
+	docker compose -f ./$(module)/docker-compose.yaml --env-file ./$(module)/docker/.env up -d --build
 
 up:
-	docker compose -f ./task_management_system/docker-compose.yaml --env-file ./task_management_system/docker/.env up -d
+	docker compose -f ./$(module)/docker-compose.yaml --env-file ./$(module)/docker/.env up -d
 
 ps:
-	docker compose -f ./task_management_system/docker-compose.yaml --env-file ./task_management_system/docker/.env ps
+	docker compose -f ./$(module)/docker-compose.yaml --env-file ./$(module)/docker/.env ps
 
 exec:
 	docker exec -it -u 1000:1000 tms-app sh
 
 stop:
-	docker compose -f ./task_management_system/docker-compose.yaml --env-file ./task_management_system/docker/.env stop -t0
+	docker compose -f ./$(module)/docker-compose.yaml --env-file ./$(module)/docker/.env stop -t0
 
 rm:
-	docker compose -f ./task_management_system/docker-compose.yaml --env-file ./task_management_system/docker/.env stop -t0
-	docker compose -f ./task_management_system/docker-compose.yaml --env-file ./task_management_system/docker/.env rm -f
-	mvn -f ./task_management_system clean
+	docker compose -f ./$(module)/docker-compose.yaml --env-file ./$(module)/docker/.env stop -t0
+	docker compose -f ./$(module)/docker-compose.yaml --env-file ./$(module)/docker/.env rm -f
+	mvn -f ./$(module) clean
 
 log:
-	docker compose -f ./task_management_system/docker-compose.yaml --env-file ./task_management_system/docker/.env logs
+	docker compose -f ./$(module)/docker-compose.yaml --env-file ./$(module)/docker/.env logs
