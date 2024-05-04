@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com</groupId>
-    <artifactId>news_provider</artifactId>
+    <artifactId>kafka_consumer</artifactId>
     <version>1.0.0</version>
-    <name>news_provider</name>
-    <description>news_provider</description>
+    <name>kafka_consumer</name>
+    <description>kafka_consumer</description>
     <properties>
         <java.version>21</java.version>
     </properties>
@@ -20,10 +20,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -41,17 +37,11 @@
             <version>2.4.0</version>
         </dependency>
         <dependency>
-            <groupId>com.github.kwabenberko</groupId>
-            <artifactId>news-api-Java</artifactId>
-            <version>1.0.2</version>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>3.4.0</version>
         </dependency>
     </dependencies>
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
     <build>
         <plugins>
             <plugin>
