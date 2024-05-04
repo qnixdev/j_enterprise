@@ -1,6 +1,7 @@
 package com.task_management_system.Controller;
 
 import com.task_management_system.Entity.Member;
+import com.task_management_system.Entity.Notification;
 import com.task_management_system.Enum.Status;
 import com.task_management_system.Request.Member.MemberCreateRequest;
 import com.task_management_system.Request.Member.MemberUpdateRequest;
@@ -8,8 +9,7 @@ import com.task_management_system.Service.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/member")
@@ -59,5 +59,12 @@ public class MemberController {
         Member member = this.memberService.read(id);
 
         return ResponseEntity.ok(this.memberService.getTaskStatuesByMember(member));
+    }
+
+    @GetMapping("/{id}/notifications")
+    public List<Notification> getNotifications(@PathVariable UUID id) throws Exception {
+        var member = this.memberService.read(id);
+
+        return this.memberService.getNotificationsByMember(member);
     }
 }
