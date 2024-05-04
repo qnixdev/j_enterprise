@@ -23,4 +23,8 @@ public class Member {
     @JsonManagedReference
     @OneToMany(targetEntity = Task.class, mappedBy = "member")
     List<Task> tasks = new ArrayList<>();
+
+    @JsonManagedReference
+    @OneToMany(targetEntity = Notification.class, mappedBy = "member", orphanRemoval = true)
+    List<Notification> notifications = new ArrayList<>();
 }

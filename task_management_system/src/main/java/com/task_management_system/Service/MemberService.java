@@ -1,6 +1,7 @@
 package com.task_management_system.Service;
 
 import com.task_management_system.Entity.Member;
+import com.task_management_system.Entity.Notification;
 import com.task_management_system.Entity.Task;
 import com.task_management_system.Enum.Status;
 import com.task_management_system.Exception.MemberByIdNotFoundException;
@@ -59,6 +60,14 @@ public class MemberService {
         return member.getTasks()
             .stream()
             .collect(Collectors.toMap(Task::getName, Task::getStatus))
+        ;
+    }
+
+    public List<Notification> getNotificationsByMember(Member member) {
+        return member.getNotifications()
+            .stream()
+            .filter(n -> !n.isRead())
+            .toList()
         ;
     }
 

@@ -89,6 +89,8 @@ public class TaskService {
         member.getTasks().add(task);
         task.setMember(member);
 
+        this.taskRepository.save(task);
+
         return task;
     }
 
