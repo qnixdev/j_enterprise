@@ -1,5 +1,5 @@
-module = kafka_broker_system
-#module = task_management_system
+#module = kafka_broker_system
+module = task_management_system
 #module = security_system
 
 help:

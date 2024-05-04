@@ -25,9 +25,11 @@ public class Task {
     @Column(name = "description")
     private String description = null;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 63)
     private Status status = Status.CREATED;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "priority", length = 63)
     private Priority priority = Priority.NORMAL;
 
