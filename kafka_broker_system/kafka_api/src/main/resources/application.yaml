@@ -1,2 +1,9 @@
 server:
   port: 8073
+
+app:
+  pg_host: ${POSTGRES_HOST}
+  pg_port: ${POSTGRES_PORT}
+  pg_database: ${POSTGRES_DB}
+  pg_user: ${POSTGRES_USER}
+  pg_password: ${POSTGRES_PASSWORD}
